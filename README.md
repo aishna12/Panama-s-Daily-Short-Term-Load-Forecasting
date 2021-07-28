@@ -104,8 +104,8 @@ Data was originally available with hourly granuality for National Electricity Co
                                           max_features = 'auto', max_depth=3, loss= 'ls', learning_rate= 0.05) 
   *  **XG Boost Regression:** </br>
      * Number of features: 15
-     * Params: XGBRegressor(subsample = 0.7999999999999999, n_estimators = 215, min_child_weight = 4, max_depth=3, 
-                             learning_rate= 0.1, colsample_bytree = 0.8999999999999999, colsample_bylevel = 0.4)
+     * Params: XGBRegressor(subsample = 0.799, n_estimators = 215, min_child_weight = 4, max_depth=3, 
+                             learning_rate= 0.1, colsample_bytree = 0.899, colsample_bylevel = 0.4)
   
   
 * **Model 2: Time Series Forecasting Model: SARIMAX:** 
@@ -122,7 +122,7 @@ Data was originally available with hourly granuality for National Electricity Co
     * RMSE for test set is:  1237.67
     * Adjusted R2 score for test:  0.70
     * MAPE for test:  3.44
-    * 
+   
   * **Random Forest Regression:**  </br>
     * RMSE for test set is:  1130.40
     * Adjusted R2 score for test:  0.75
