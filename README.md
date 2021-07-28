@@ -9,9 +9,12 @@ A STLF case study for the country of Panama based on daily granularity using var
 * [Data Source](#data-source)
 * [Tools](#tools)
 * [Data Preprocessing](#data-preprocessing) 
+  * Missing Data
+  * Outlier Detection
+  * Data Resampling
   * Feature selection
-  * Statistical methods and plotting
-  * Outlier detection
+  * Statistical parameters
+
 * [Prediction Models](#prediction-models)
   * Machine Learning Technique : Regression Methodologies
   * Time Series Analysis and Forecasting : SARIMAX
@@ -27,7 +30,8 @@ This project focuses on Short Term Electricity Load Forecasting for the country 
 <!--DATA SOURCE-->
 ## Data Source
 
-The Dataset for Panama's National Electricity Consumption was downloaded from [kaggle](https://www.kaggle.com/ernestojaguilar/shortterm-electricity-load-forecasting-panama) website.
+The Dataset for Panama's National Electricity Consumption was downloaded from [kaggle](https://www.kaggle.com/ernestojaguilar/shortterm-electricity-load-forecasting-panama) website for the datetime: 03-01-2015  01:00:00 to 27-06-2020 00:00
+
 * CSV File : continuous_dataset.csv
 * Description of data and its features: Columns metadata and train-test splits details.pdf
 
@@ -39,94 +43,121 @@ The Dataset for Panama's National Electricity Consumption was downloaded from [k
 <!--DATA PREPROCESSING-->
 ## Data Preprocessing
 
-* **Missing Values:**
+* **Missing values:**
 The data has no missing values.
 
-
 * **Outlier detection:**
-![image](![image](https://user-images.githubusercontent.com/81852314/127360335-172d4690-4f5b-447f-9ee8-e0154a81e3f0.png))
+Outliers detection was attempted using the IQR Method. A data point is an outlier if it lies below Q1-1.5(IQR) or Q1+1.5(IQR). No strict outliers were found in the dataset.
+
+* **Data resampling:**
+Data was originally available with hourly granuality for National Electricity Consumption and has been transformed to daily granuality for the sake of forecasting daily electricity consumption.
+
+* **Feature selection:** Intially the following features were selected and engineered:
+  * Type of the Day:
+    * Sunday
+    * Saturday
+    * Weekday
+    * National Holiday
+    * Weekday
+    * Lockdown
+  * Time of the year divided by months quaterly (Q1, Q2, Q3, Q4)
+  * Environmental Factors (of biggest 3 cities of Panama: Tocumen, David, Santiago):
+    * Average Temperature 
+    * Average Humdity
+    * Average Wind speed
+    * Average Precipitation
+  * Lagged Demand (Electricity demand of the same day previous week)
+  * XGBoost Regressor, an ensemble feature selection technique was used to compute feature importances.
+ 
+ * **Statistical parameters:** The following three parameters were calculated to ensure integrity and validity of features in the model:
+   * Multicollinearity using pearson correltaion and Variance Inflation Factor (VIF) technique was checked.
+   * Pearson Correlation: Correlation matrix was formed to eliminate any features that broadcasted a correlation > 0.7 amongst themselves:
+   ![image](https://user-images.githubusercontent.com/81852314/127386356-7e40e19a-a1d0-4d22-8edc-a643d54c5a61.png)
+   * VIF: VIF was computed amongst independent varaibles to elimate if any variable showcased a VIF > 4. None of the variables showcased VIF above the elimination threshold.
+   * Partial Autocorrelation: To include the lagged demand variable of order 7 to account for the trend of the increase in electricty consumption, Partial Autocorrelation     Function (PACF) was plotted to check for the significance of order of lagged variable.
+ ![image](https://user-images.githubusercontent.com/81852314/127388645-950d855e-5785-417f-b21c-11577826cb16.png)
+
+
 
 
 <!-- PREDICTION MODELS-->
 ## Prediction Models
-* **Model 1:** Initially, the data have been trained on 4 models:
-  * Linear Regression
-  * Decision Tree Regression
-  * Random Forest Regression
-  * Support Vector Machine
-  The results (accuracies) from these models were
-not up to the mark and thus thumbnail is introduced in II
-part to improve the output.
-* **Model 2:**  The training of the model has been done in 2 parts: <br/>
-  * The first part focuses on extracting the feature, ”thumbnail
-result”. Convolutional Neural Network has been
-used for the same. Dataset for the CNN consists of the
-Thumbnails and the labelled views. The actual views
-have been mapped into labelled views by classifying the
-views into 10 classes. The data is then trained with the
-CNN and the resulting labels, giving an approximation of
-the actual views are stored as “thumbnail result” to be used
-further. <br/>
-  **Architecture of CNN:** <br/>
-Number of Layers: 6 <br/>
-*Layer1:* Convolution Layer with, kernel size = 5, padding
-= 2, stride = 1, dropout = 0.25, mapping one input channel
-into 16 channels. <br/>
-After this, ReLu is applied on the outputs.<br/>
-*Layer2:* Max Pooling Layer with stride = 2 <br/>
-*Layer3:* Convolution Layer with, kernel size = 5,
-padding = 2, stride = 1, dropout = 0.25, mapping 16 input
-channel into 32 channels.<br/>
-After this, ReLu is applied on the outputs.<br/>
-*Layer4:* Max Pooling Layer with stride = 2<br/>
-*Layer5:* Fully Connected Layer mapping into 100
-neurons, dropout = 0.25.<br/>
-*Layer6:* Fully Connected Layer mapping 100 neurons
-into 10 class probabilities. <br/>
-* The ”thumbnail result” feature is now used with
-the above-mentioned features and has been trained with the
-following models, with the target variable being the actual
-number of views.
-    * Support Vector Regressor
-    * Random Forest Regressor
-     ![image](https://user-images.githubusercontent.com/81852314/120922056-aea7ae80-c6e4-11eb-8516-a98ac286be7b.png)
+* **Model 1: Regression Techniques** Initially, the data have been trained on the following regression models:
+  * **Multiple Linear Regression:** </br>
+    * Number of features: 12
+    * Params: 
+  * **Random Forest Regression:**  </br>
+    * Number of features: 13
+    * Params: RandomForestRegressor(n_estimators= 1400, min_samples_split=5, 
+                                  min_samples_leaf= 1, max_features='sqrt', max_depth = 30, bootstrap= True)
+  * **KNN Regression:** </br>
+    * Number of features: 6
+    * Params: KNeighborsRegressor(weights= 'uniform', n_neighbors= 42, metric='manhattan', leaf_size= 46)
+    
+  * **Support Vector Machine:** </br>
+     * Number of features: 10
+     * Params: RandomForestRegressorSVR(C=2.5, kernel='linear', tol= 6.362524107592032e-05)
+     
+  * **Gradient Boost Regression:** </br>
+     * Number of features: 15
+     * Params: GradientBoostingRegressor(n_estimators= 300, min_samples_split=10, min_samples_leaf=1,
+                                          max_features = 'auto', max_depth=3, loss= 'ls', learning_rate= 0.05) 
+  *  **XG Boost Regression:** </br>
+     * Number of features: 15
+     * Params: XGBRegressor(subsample = 0.7999999999999999, n_estimators = 215, min_child_weight = 4, max_depth=3, 
+                             learning_rate= 0.1, colsample_bytree = 0.8999999999999999, colsample_bylevel = 0.4)
+  
+  
+* **Model 2: Time Series Forecasting Model: SARIMAX:** 
+  * Seasonal Autoregressive Integrated Moving Average model with an Exogenous Variable(Holiday) was built using the auto_arima function in pmdarima library.
+    Data was randomly split for sequential training and testing purpose. 7 weeks from 2019 and 2020 were randomly selected. The model with parameters ARIMA(5,1,0)(2,0,0)[7]  
+    performed good on the weeks split in 2019 but performed not so well for the pandemic hit weeks in 2020.
+
 
 
 <!--RESULTS-->
 ## Results
-* Model 1:
-  * Linear Regression: <br/>
-R2 Score on the Training Data: 0.6364104183115034 <br/>
-R2 Score on the Test Data: 0.6282098478473409 <br/>
-  * Decision Tree Regressor: <br/>
-R2 Score on the Training Data: 0.999999740665929 <br/>
-R2 Score on the Test Data: 0.5009736557269098  <br/>
-  * SVR: <br/>
-R2 Score on the Training Data: 0.7536050917458403 <br/>
-R2 Score on the Test Data: 0.7255821853378172 <br/>
-* Model 2:  <br/>
-  * SVR:  <br/>
-R2 Score on the Training Data: 0.955  <br/>
-R2 Score on the Test Data: 0.92  <br/>
-  * RandomForest:  <br/>
-R2 Score on the Training Data: 0.97  <br/>
-R2 Score on the Test Data: 0.95  <br/>
+* **Model 1: Regression Techniques** 
+  * **Multiple Linear Regression:** </br>
+    * RMSE for test set is:  1237.67
+    * Adjusted R2 score for test:  0.70
+    * MAPE for test:  3.44
+    * 
+  * **Random Forest Regression:**  </br>
+    * RMSE for test set is:  1130.40
+    * Adjusted R2 score for test:  0.75
+    * MAPE for test:  8.50
+    
+  * **KNN Regression:** </br>
+    * RMSE for test set is:  1671.60
+    * Adjusted R2 score for test:  0.47
+    * MAPE for test:  4.33
+    
+  * **Support Vector Machine:** </br>
+     * RMSE for test set is:  1619.41
+     * Adjusted R2 score for test:  0.49
+     * MAPE for test:  8.24
+     
+  * **Gradient Boost Regression:** </br>
+     * RMSE for test set is:  1124.57
+     * Adjusted R2 score for test:  0.75
+     * MAPE for test:  8.79
+     
+  *  **XG Boost Regression:** </br>
+     * RMSE for test set is:  1144.94
+     * Adjusted R2 score for test:  0.74
+     * MAPE for test:  8.80
+  
+  
+* **Model 2: Time Series Forecasting Model: SARIMAX:** 
+  * Seasonal Autoregressive Integrated Moving Average model with an Exogenous Variable(Holiday) was built using the auto_arima function in pmdarima library.
+    Data was randomly split for sequential training and testing purpose. 7 weeks from 2019 and 2020 were randomly selected. The model with parameters ARIMA(5,1,0)(2,0,0)[7]  
+    performed good on the weeks split in 2019 but performed not so well for the pandemic hit weeks in 2020.
+
 
 <!-- CONCLUSION-->
 ## Conclusion
-Thumbnail proved out an extremely important feature
-for sure as the results improved significantly.
-Seeing the results without thumbnail, only 2 models
-were considered most optimal, the SVR and the Random
-Forest Regressor.
-CNN + Random Forest turns out to be the best model
-for this dataset.
 
 <!--RECOMMENDATION AND FUTURE WORK-->
 ## Recommendations and Future Work
-* A simple application could be made using thde developed algorithms
-where a user can enter all the features of their upcoming
-video having details of thumbnail along with other
-attributes.
-* Few more important features like
-Title of the video and Description of the video can be used as inputs and an NLP Model can be used to predict more reliable results.
+
