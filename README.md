@@ -114,23 +114,23 @@ Data was originally available with hourly granuality for national electricity co
     
 <!-- ERROR METRICS-->
 ## Error Metrics
-* **RMSE:** Root Mean Square Error (RMSE) is the standard deviation of the residuals (prediction errors).
-    from sklearn.metrics import mean_squared_error
-    mse = mean_squared_error(y_test, y_pred)
-    rmse = pow(mse,1/2)
- * **Adjusted R squared:** It measures the proportion of variation explained by only those independent variables that really help in explaining the dependent variable. It penalizes you for adding independent variable that do not help in predicting the dependent variable.
-import numpy as np
-from sklearn.metrics import r2_score
+* **RMSE:** Root Mean Square Error (RMSE) is the standard deviation of the residuals (prediction errors). </br>
+    `from sklearn.metrics import mean_squared_error` </br>
+    `mse = mean_squared_error(y_test, y_pred)` </br>
+    `rmse = pow(mse,1/2)` </br>
+* **Adjusted R squared:** It measures the proportion of variation explained by only those independent variables that really help in explaining the dependent variable. It penalizes you for adding independent variable that do not help in predicting the dependent variable.
 
-def adj_r2(actual, pred, i):
-    return 1 - ((1-r2_score(actual,pred))(len(actual)-1)/(len(actual)-i-1))
+  `import numpy as np` </br>
+  `from sklearn.metrics import r2_score` </br>
+  `def adj_r2(actual, pred, i):` </br>
+   `--->return 1 - ((1-r2_score(actual,pred))(len(actual)-1)/(len(actual)-i-1))` </br>
     
- * **MAPE:** The mean absolute percentage error (MAPE) is a measure of prediction accuracy of a forecasting method in statistics. It usually expresses the accuracy as a ratio.
+* **MAPE:** The mean absolute percentage error (MAPE) is a measure of prediction accuracy of a forecasting method in statistics. It usually expresses the accuracy as a ratio.
 
-import numpy as np
-def mape(actual, pred): 
-    actual, pred = np.array(actual), np.array(pred)
-    return np.mean(np.abs((actual - pred) / actual)) * 100
+  `import numpy as np`</br>
+  `def mape(actual, pred):`</br> 
+  ` --->actual, pred = np.array(actual), np.array(pred)`</br>
+  ` --->return np.mean(np.abs((actual - pred) / actual)) * 100`</br>
       
     
 <!--RESULTS-->
