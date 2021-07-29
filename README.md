@@ -109,8 +109,19 @@ Data was originally available with hourly granuality for national electricity co
   
 * **Model 2: Time Series Forecasting Model: SARIMAX:** 
   * Seasonal Autoregressive Integrated Moving Average model with an Exogenous Variable(Holiday) was built using the auto_arima function in pmdarima library.
+  * Params: pm.auto_arima(train_data, m = 7, seasonal = True, exog = train4'holiday',                    
+                    start_p = 0, start_q = 0, max_order = 5, test = 'kpss',
+                     error_action = 'ignore', suppress_warnings = True,
+                     stepwise = True, trace = True)
+  * KPSS test statistic was used to check for stationarity in the data and differencing of order 7 was used to eliminate the stationarity.
+  * Per the formula SARIMA(p,d,q)x(P,D,Q,s), the parameters for the model are as follows:
+      * p and seasonal P: indicate number of autoregressive terms (lags of the stationarized series)
+      * d and seasonal D: indicate differencing that must be done to stationarize series
+      * q and seasonal Q: indicate number of moving average terms (lags of the forecast errors)
+      * s: indicates seasonal length in the data
     Data was randomly split for sequential training and testing purpose. 7 weeks from 2019 and 2020 were randomly selected. The model with parameters ARIMA(5,1,0)(2,0,0)[7]  
     performed good on the weeks split in 2019 but performed not so well for the pandemic hit weeks in 2020.
+    
     
 <!-- ERROR METRICS-->
 ## Error Metrics
