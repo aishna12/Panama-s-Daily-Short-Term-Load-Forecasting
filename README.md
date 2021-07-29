@@ -195,12 +195,12 @@ Data was originally available with hourly granuality for national electricity co
  * The independent features do not seem to fit KNN and Support Vector Regression well.
  
 * SARIMA model with an exogenous effect of holiday factor seems to work well with a low MAPE score for the data except for the weeks at beginning of lockdown in the year 2020, but seems to adjust itself in the succeeding weeks:
-* Model performance before lockdown:
+* Model performance before the lockdown:
 ![image](https://user-images.githubusercontent.com/81852314/127471668-513b1d82-a4f8-49c6-8f3c-e58cd2390e34.png)
 * Model performance right at the beginning of lockdown:
 ![image](https://user-images.githubusercontent.com/81852314/127472202-04264326-c05d-4172-a46e-fdc0ea5b3dd2.png)
 
-* Model performance after lockdown
+* Model performance after adjusting to the lockdown
 ![image](https://user-images.githubusercontent.com/81852314/127471804-6cd4de6a-3437-48d0-80a7-02c67238ebef.png)
 
 <!--RECOMMENDATION AND FUTURE WORK-->
