@@ -48,7 +48,7 @@ The dataset for Panama's national electricity consumption was downloaded from [k
 The data has no missing values.
 
 * **Outlier detection:**
-Outliers detection was attempted using the IQR Method. A data point is an outlier if it lies below Q1-1.5(IQR) or Q1+1.5(IQR). No strict outliers were found in the dataset.
+Outliers detection was attempted using the IQR Method. A data point is an outlier if it lies below Q1-1.5(IQR) or Q3+1.5(IQR). No strict outliers were found in the dataset.
 
 * **Data resampling:**
 Data was originally available with hourly granuality for national electricity consumption and has been transformed to daily granuality for the sake of forecasting daily electricity consumption.
