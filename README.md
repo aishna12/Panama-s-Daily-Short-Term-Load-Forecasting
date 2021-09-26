@@ -118,7 +118,7 @@ Data was originally available with hourly granuality for national electricity co
       * p and seasonal P: indicate number of autoregressive terms (lags of the stationarized series)
       * d and seasonal D: indicate differencing that must be done to stationarize series
       * q and seasonal Q: indicate number of moving average terms (lags of the forecast errors)
-      * s: indicates seasonal length in the data
+      * s: indicates seasonal length in the data </br>
     Data was randomly split for sequential training and testing purpose. 7 weeks from 2019 and 2020 were randomly selected. The model with parameters ARIMA(5,1,0)(2,0,0)[7]  
     performed good on the weeks split in 2019 but performed not so well for the pandemic hit weeks in 2020.
     
@@ -186,7 +186,7 @@ Data was originally available with hourly granuality for national electricity co
       * Adjusted R2 score for test data:  0.70
       * Adjusted R2 score for train data:  0.72
     * We get the least MAPE value for MLR: 3.44
-    * The P value is significant for all the features (<0.005)
+    * The P value is significant for all the features (<0.05)
     * Error Analysis: The error terms are also normally distributed.</br>
     ![image](https://user-images.githubusercontent.com/81852314/127469916-527f987a-5f08-412d-96ab-aa90f58283c4.png)
     
@@ -205,4 +205,4 @@ Data was originally available with hourly granuality for national electricity co
 
 <!--RECOMMENDATION AND FUTURE WORK-->
 ## Recommendations and Future Work
-A separate model for household electricity load consumption and industrial electricity load consumption can be built for better and precise predictions.
+Separate models for household electricity load consumption and industrial electricity load consumption can be built for better and precise predictions.
